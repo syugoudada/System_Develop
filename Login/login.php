@@ -8,7 +8,11 @@
   $_SESSION["password"] = $_POST['pass'];
   $myself-> login();
   if($myself->exist($_SESSION)){
-    header('Location:index.php');
+    if($myself->password_resach($_SESSION)){
+      header('Location:index.php');
+    }else{
+      echo "失敗";
+    }
   }else{
     echo "失敗";
   }

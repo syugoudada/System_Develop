@@ -1,20 +1,10 @@
 <?php
-  require_once'';
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <div>
-    <form action="password_change.php" method="POST">
-      旧:<input type="password" required>
-      新:<input type="password" required>
-    </form>
-  </div>
-</body>
-</html>
+session_start();
+require_once('../Repository/Password_Change_Repository.php');
+$myself = new Password_Change_Repository('root', 'rootpass');
+$myself->login();
+if ($myself->update($_SESSION, $_POST['oldpass'], $_POST['newpass'])) {
+  print("変更しました");
+} else {
+  print("パスワードが違います");
+}

@@ -50,7 +50,10 @@ class Account extends Repository{
     * パスワ-ド比較
     */
 
-   function password_resach($user){
-     $user['password'] = "SELECT password from account where user = '$user[user]'";
+   function password_resach(array $user){
+     $user['sql'] = "SELECT password from account where name = '$user[user]'";
+     $result = parent::find($user);
+     $flag = $this->decryption($user['password'],$result[0]['password']);
+     return $flag;
    }
 }

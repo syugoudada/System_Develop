@@ -1,6 +1,6 @@
 <?php
 session_start();
-print($_SESSION['user']);
+#クッキーを書くuser
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +11,9 @@ print($_SESSION['user']);
   <title>Document</title>
 </head>
 <body>
-  <h1>成功</h1>
-  <a href="./php/Password_Change/password_change.php"></a>
+  <h1>トップ画面</h1>
+  <form action="../Password_Change/change.php" method="POST">
+    <input type="submit" value="送信">
+  </form>
 </body>
 </html>
