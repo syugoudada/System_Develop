@@ -28,10 +28,8 @@ class Account extends Repository{
    */
 
    public function find(array $user,$input_parameters=NULL){
-    // $password = $this->encrypt($user['password']);
-    $sql = "Select name,point from account where name = '$user[user]' && password = '$user[password]'";
-    // $sql = "Select name,point from account where name = '$user[user]' && password = '$password'";
-    $user['sql'] = $sql;
+    // $sql = "Select name,point from account where name = '$user[user]' && password = '$user[password]'";
+    $user['sql'] = "Select name,point from account where name = '$user[user]'";
     $result = parent::find($user);
     return $result;
    }
@@ -43,31 +41,16 @@ class Account extends Repository{
    */
 
   public function exist(array $user,$input_parameters = NULL){
-    // $password = $this->encrypt($user['password']);
-    $sql = "SELECT COUNT(*) FROM account where name = '$user[user]' && password = '$user[password]'"; 
-    $user['sql'] = $sql;
+    $user['sql'] = "SELECT COUNT(*) FROM account where name = '$user[user]'"; 
     $result = parent::exist($user);
     return $result;
   }
-
-  /**
-   * パスワード変更
-   * @param array $user 現在の情報
-   * @param string $new_password
-   */
-
-   function update(array $user,$new_password,$input_parameters=NULL){
-      $sql = "UPDATE account set password = '$new_password' where user = '$user[user]' and password = '$user[password]'";
-      $stmt = $this->dbh->prepare($sql); 
-      $result = $stmt->execute($input_parameters);
-      return $result;
-   }
 
    /**
     * パスワ-ド比較
     */
 
-  //  function password_resach($user){
-  //    $sql = "SELECT password from account where user = '$user[user]' and password = '$user[password]'";
-  //  }
+   function password_resach($user){
+     $user['password'] = "SELECT password from account where user = '$user[user]'";
+   }
 }

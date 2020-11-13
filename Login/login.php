@@ -4,11 +4,11 @@
   header('charset=UTF-8');
   $myself = new Account('root','rootpass');
 
-  $user["user"] = $_POST['user'];
-  $user["password"] = $_POST['pass'];
+  $_SESSION["user"] = $_POST['user'];
+  $_SESSION["password"] = $_POST['pass'];
   $myself-> login();
-  if($myself->exist($user)){
-    header('Location:index.html');
+  if($myself->exist($_SESSION)){
+    header('Location:index.php');
   }else{
     echo "失敗";
   }
