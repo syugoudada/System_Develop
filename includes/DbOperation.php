@@ -59,4 +59,21 @@ class DbOparation
         $res = $this->select('SELECT * FROM category ORDER BY id');
         return $res;
     }
+
+
+    /**
+     * Get purchased book ids
+     *
+     * @param Int $userId If set 0 to this param, return all products.
+     * @return array
+     */
+    function getPurchasedBooks(Int $userId)
+    {
+        if ($userId == 0) {
+            $res = $this->select('SELECT id FROM product');
+        } else {
+            $res = $this->select('SELECT product_id FROM purchase WHERE account_id = ?', array($userId));
+        }
+        return $res;
+    }
 }
