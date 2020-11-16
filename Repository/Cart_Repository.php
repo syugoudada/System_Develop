@@ -16,27 +16,41 @@ class Cart extends Repository
      * @return boolean
      */
 
-    public function save(array $user, $input_parameters = NULL){
-        $user['sql'] = "insert into account(cart_json) values ('$user[cart_json]') where name = '$user[user]'";
+    //public function save(array $user, $input_parameters = NULL){
+    //    $user['sql'] = "UPDATE account SET cart_json = '$user[cart_json]' where name = '$user[user]'";
+    //    $result = parent::save($user);
+    //    return $result;
+    //}
+
+    public function save(array $user, $input_parameters=NULL){
+        $user['sql'] = "UPDATE account SET cart_json = '$user[cart_json]' where name = '戸田麻陽'";
         $result = parent::save($user);
+        var_dump($result);
         return $result;
     }
 
     /**
      * 商品ID
-     * @param array $user 商品
-     * @return array $result 商品ID アカウントID
+     * @param array $user カート
+     * @return $result cart_json
      */
 
-    public function find(array $user, $input_parameters = NULL)
-    {
-        // $password = $this->encrypt($user['password']);
-        $product_sql = "select id from product where name = '$this->value'";
-        $user_sql = "select id from account where name = 'user'";
-        $user['sql'] = $product_sql;
-        $result['product_id'] = parent::find($user);
-        $user['sql'] = $user_sql;
-        $result['user_id'] = parent::find($user);
+    public function find_cart(array $user, $input_parameters=NULL){
+        $user['sql'] = "select cart_json from account where name = '$user[user]'";
+        $result = parent::find($user);
+        return $result;
+    }
+
+    public function find(array $user, $input_parameters=NULL){
+        $id = $this->find_cart($user);
+        var_dump($id);
+        $product_id = [];
+        $product_id[] = json_decode($id, true);
+        var_dump($product_id);
+        foreach ($product_id as $value) {
+            $user['sql'] = "select * from product where name = '$value'";
+        }
+        $result = parent::find($user);
         return $result;
     }
 }

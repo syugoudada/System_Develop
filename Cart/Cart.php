@@ -16,28 +16,49 @@
         //カートクラスのインスタンス
         $myself = new Cart('root','rootpass');
         $myself->login();
-        session_start();
-        $_SESSION["cart"] = $product_id;
 
+
+        /** 
+         *カートに入れた商品をデータベースに格納
+         *$product_id 商品id
+         *$jsonstr jsonファイルの変数
+         * 
+        **/
         //カートに入ってる商品のid入れる配列
         $product_id = [];
+        $_SESSION["cart"] = $product_id;
 
-        //クリックされたら本のIDを取得
-        $product_id = 1;
+        //テスト
+        $product_id[] = 1;
+        $product_id[] = 100;
+        $product_id[] = 101;
+        $product_id[] = 102;
+        $product_id[] = 103;
+        
+        
 
         //商品のIDを取得
-        //$product_id = $_GET["id"];
-        $_SESSION["cart"] = $product_id;
+        //$product_id[] = $_GET["id"];
 
         //カートに入ったIDの配列をjsonに変換
         $jsonstr =  json_encode($product_id);
-        print $jsonstr;
+        //print $jsonstr;
         $_SESSION["cart_json"] = $jsonstr;
+        //var_dump($_SESSION);
         $myself->save($_SESSION);
 
 
+        /** 
+         *カートに入れた商品を表示
+         *$product_id 商品id
+         *$jsonstr jsonファイルの変数
+         * 
+        **/
+        
+        $cart = $myself->find($_SESSION);
+        print $cart;
         //カートの中身を表示
-        //データベースログイン
+
         
         ?>
     
