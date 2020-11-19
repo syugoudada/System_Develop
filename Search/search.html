@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="jquery.raty.js"></script>
   <link rel="stylesheet" href="../Css/index.css">
   <title></title>
 </head>
@@ -23,6 +24,7 @@
           </div>
           <div class="description">
             <div class="title"></div>
+            <p id="star1"></p>
             <div class="price"></div>
             <input type="button" name="cart" value="Cart">
           </div>
@@ -34,25 +36,34 @@
   <script>
     $(function () {
       $("#submit").click(function () {
-        var bar = {"title":$('#search_bar').val()};
+        var bar = { "title": $('#search_bar').val() };
         // 非同期通信
         $.ajax({
           type: "POST",
           url: "search_service.php",
           data: bar,
           dataType: "json",
-          success: function(msg){
+          success: function (msg) {
+            if(msg['id'].length > 0){
+              make_obj(msg);
+              star(msg);
+            }
             console.log(msg);
-            make_obj(msg);
           }
         });
 
-        function make_obj(content){
+        function make_obj(content) {
           $('.title').append(content["name"][0]);
           $('.price').append(content["price"][0] + "円");
         }
-      });
 
+        function star(content) {
+          $('#star1').raty({
+            readOnly: true,
+            score: content["avg"][0]
+          });
+        }
+      });
     });
   </script>
 </body>

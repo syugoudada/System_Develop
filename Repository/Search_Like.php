@@ -7,7 +7,7 @@ class Search_Like extends Repository{
   }
 
   public function search(string $bookname){
-    $sql['sql'] = "SELECT id,name,price FROM product WHERE name LIKE '$bookname%'";
+    $sql['sql'] = "SELECT id,name,price,evaluation_avg FROM product WHERE name LIKE '$bookname%'";
     $result = parent::find($sql);
     return $result;
   }
