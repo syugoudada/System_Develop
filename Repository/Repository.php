@@ -29,9 +29,8 @@ class Repository implements IuserRepository{
   public function login(){
     try{
       $this->dbh = new PDO($this->dns, $this ->name, $this ->password);
-      echo "接続成功\n";
     }catch (PDOException $e) {
-      echo "接続失敗: " . $e->getMessage() . "\n";
+      // echo "接続失敗: " . $e->getMessage() . "\n";
       exit();
     }
   }
