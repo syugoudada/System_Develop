@@ -29,7 +29,7 @@ class Repository implements IuserRepository{
   public function login(){
     try{
       $this->dbh = new PDO($this->dns, $this ->name, $this ->password);
-      echo "接続成功\n";
+      echo "接続成功";
     }catch (PDOException $e) {
       echo "接続失敗: " . $e->getMessage() . "\n";
       exit();
@@ -77,7 +77,7 @@ class Repository implements IuserRepository{
   }
 
   public function exist(array $user,$input_parameters = NULL){
-    var_dump($user);
+    // var_dump($user);
     $stmt = $this->dbh->prepare($user['sql']); 
     $flag = $stmt->execute($input_parameters);
     if(!$flag){

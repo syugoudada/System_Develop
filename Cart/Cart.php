@@ -25,26 +25,23 @@
          * 
         **/
         //カートに入ってる商品のid入れる配列
-        $product_id = [];
+        $product_id["id"] = array();
         $_SESSION["cart"] = $product_id;
 
         //テスト
-        $product_id[] = 1;
-        $product_id[] = 100;
-        $product_id[] = 101;
-        $product_id[] = 102;
-        $product_id[] = 103;
-        
+        array_push($product_id["id"], 1);
+        array_push($product_id["id"],100);
+        // $product_id["id"] = 101;
+        // $product_id["id"] = 102;
+        // $product_id["id"] = 103;
         
 
         //商品のIDを取得
         //$product_id[] = $_GET["id"];
 
         //カートに入ったIDの配列をjsonに変換
-        $jsonstr =  json_encode($product_id);
+        $_SESSION["cart_json"] = json_encode($product_id);
         //print $jsonstr;
-        $_SESSION["cart_json"] = $jsonstr;
-        //var_dump($_SESSION);
         $myself->save($_SESSION);
 
 
@@ -56,10 +53,9 @@
         **/
         
         $cart = $myself->find($_SESSION);
-        print $cart;
-        //カートの中身を表示
 
-        
+        var_dump($cart);
+        //カートの中身を表示
         ?>
     
     </body>
