@@ -18,15 +18,15 @@
     </div>
     <div class="search_display">
       <div id="product_content">
-        <div class="product-part">
+        <!-- <div class="product-part">
           <div class="product_image">
             <img src="../images/book1.jpg" height="200px" width="200px">
           </div>
           <div class="description">
             <div class="title"></div>
             <p id="star1"></p>
-            <div class="price"></div>
-            <input type="button" name="cart" value="Cart">
+            <div class="price"></div> -->
+            <!-- <input type="button" name="cart" value="Cart"> -->
           </div>
         </div>
       </div>
@@ -45,22 +45,23 @@
           dataType: "json",
           success: function (msg) {
             if(msg['id'].length > 0){
-              make_obj(msg);
-              star(msg);
+              for(var i = 0; i < msg["id"].length; i++){
+                make_obj(msg,i);     
+              }
             }
             console.log(msg);
           }
         });
 
-        function make_obj(content) {
-          $('.title').append(content["name"][0]);
-          $('.price').append(content["price"][0] + "円");
+        function make_obj(content,index) {
+          $('#product_content').append(' <div class="product-part"><div class="product_image"><img src="../images/book1.jpg" height="200px" width="200px"></div><div class="description"><div class="title">' + content["name"][index] + '</div><p id="star' + index + '"></p><div class="price">'+ content["price"][index] + '円</div><input type="submit" name="cart" value="Cart"></div></div>');
+          star(content,index);
         }
 
-        function star(content) {
-          $('#star1').raty({
+        function star(content,index) {
+          $('#star' + index).raty({
             readOnly: true,
-            score: content["avg"][0]
+            score: content["avg"][index]
           });
         }
       });
