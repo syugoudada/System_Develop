@@ -28,7 +28,7 @@ class Product_Registration extends Repository{
    * @return boolean 
    */
 
-  function Url(array $author,$input_parameters=NULL){
+  function url(array $author,$input_parameters=NULL){
     if(isset($author["url"]) && $author["url"] != ""){
       $sql = "insert into author values('$author[name]','$author[url]')";
     }else{
@@ -39,9 +39,15 @@ class Product_Registration extends Repository{
     return $result;
   }
 
-  
+  function genre(array $author,$input_parameters=NULL){
+    $author['sql'] = "SELECT id,name from category";
+    $result = parent::find($author);
+    return $result;
+  }
 
-  function genre(array $author){
-
+  function sub_genre($id){
+    $sql['sql'] = "SELECT name from category where parent_id = id";
+    $result = parent::find($sql);
+    return $result;
   }
 }
