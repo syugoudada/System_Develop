@@ -11,4 +11,10 @@ class Search_Like extends Repository{
     $result = parent::find($sql);
     return $result;
   }
+
+  public function find(array $user, $input_parameters = NULL){
+    $sql['sql'] = "SELECT * from product WHERE id = $user[product_id]";
+    $result = parent::find($sql);
+    return $result;
+  }
 }
