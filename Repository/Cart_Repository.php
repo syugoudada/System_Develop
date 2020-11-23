@@ -54,7 +54,6 @@ class Cart extends Repository
         $ids = $product_id["id"];
         $result = array();
         foreach ($ids as $id) {
-            //echo $id;
             $user['sql'] = "select id, name, price from product where id = $id";
             array_push($result, parent::find($user));
         }

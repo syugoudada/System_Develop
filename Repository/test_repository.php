@@ -16,15 +16,10 @@ class test extends Repository
      * @return array $result 商品ID アカウントID
      */
 
-    public function find(array $user, $input_parameters = NULL)
-    {
-        // $password = $this->encrypt($user['password']);
-        $product_sql = "select id from product where name = '$this->value'";
-        $user_sql = "select id from account where name = 'user'";
-        $user['sql'] = $product_sql;
-        $result['product_id'] = parent::find($user);
-        $user['sql'] = $user_sql;
-        $result['user_id'] = parent::find($user);
+    public function find(array $user, $input_parameters = NULL){
+        $user['sql'] = "select * from product";
+        $result = parent::find($user);
         return $result;
     }
+
 }
