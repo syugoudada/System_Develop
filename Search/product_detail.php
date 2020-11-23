@@ -32,8 +32,10 @@ $product_detail = $myself->find($_POST);
           <div class="price">
             <?= $product_detail[0]["price"]; ?>円
           </div>
-          <div id='1' hidden></div>
-          <input type="submit" name="cart" value="Cart">
+          <form action="" method="POST">
+            <input type="text" id='1' hidden></div>
+            <input type="submit" name="cart" value="Cart">
+          </form>
         </div>
       </div>
     </div>
