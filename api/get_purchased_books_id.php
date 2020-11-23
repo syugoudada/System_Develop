@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' || isset($_GET['test'])) {
 
     $value = $db->getPurchasedBooks($userId);
     $response['error'] = false;
+    $response['message'] = '承認';
     $response['content'] = $value;
 } else {
     $response['error'] = true;
