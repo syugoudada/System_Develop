@@ -1,7 +1,8 @@
 <?php
-require_once '../Repository/Purchase_Repository.php';
+require_once('../Repository/Purchase_Repository.php');
+require_once('../Repository/db_config.php');
 session_start();
-$myself = new Purchase('root','rootpass');
+$myself = new Purchase(DB_USER,DB_PASS);
 $myself->login();
 $kago = array('この音とまれ!');
 // $user = $_SESSION['user'];
