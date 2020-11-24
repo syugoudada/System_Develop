@@ -50,13 +50,19 @@ class DbOparation
     }
 
     /**
-     * Get all gategories
+     * Get a category or all category
      *
-     * @return array all categories
+     * @param Int $id
+     * @return array|array(array) a category row | all category
      */
-    function getCategories()
+    function getCategory(Int $id = null)
     {
-        $res = $this->select('SELECT * FROM category ORDER BY id');
+        if ($id == null) {
+            $res = $this->select('SELECT * FROM category ORDER BY id');
+        } else {
+            $res = $this->select('SELECT * FROM category WHERE id = ? ORDER BY id desc', array($id));
+            $res = $res[0];
+        }
         return $res;
     }
 
