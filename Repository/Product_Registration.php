@@ -1,5 +1,6 @@
 <?php
 require_once("Repository.php");
+require_once("db_config.php");
 class Product_Registration extends Repository{
   function __construct(string $name,string $password){
     parent::__construct($name,$password);
@@ -60,5 +61,45 @@ class Product_Registration extends Repository{
     $sql['sql'] = "SELECT id,name from category where parent_id = $id";
     $result = parent::find($sql);
     return $result;
+  }
+
+  /**
+   * サブジャンル登録
+   * @param array $genre
+   * @return boolean
+   */
+
+  function sub_genre_save(array $genre){
+    $genre['sql'] = "Insert into categoly(name,parent_id) values($genre[title]',$genre[parent_id])";
+    $result = parent::save($genre['sql']);
+    return $result;
+ }
+
+ /**
+  * 本情報
+  * @param array $book_information
+  * @return boolean 
+  */
+
+ function save($book_information){
+  $categoly['sql'] = "Select id from category where name = '$book_information[subgenre]' && parent_id = '$book_information[id]'";
+  $author['sql'] = "Select id from author where name = '$book_information[author]'";
+  $book['category'] = parent::find($categoly);
+  $book['author'] = parent::find($author);
+  $book_information['sql'] = "Insert into product(author_id,name,category_id,description,price,evaluation_avg) values($book[author][0]['id'],$book_information[name],$book[category][0]['id'],$book_information[description],$book_information[price])";
+  $result = parent::save($book_information);
+  return $result;
+ }
+
+ /**
+  * 商品参照登録
+  * @
+  * @return boolean $result
+  */
+
+  function product_reference($book_description){
+    $product['sql'] = "Select id from product where name = '$book_description[name]'";
+    $product_id = parent::find($product);
+    $reference_save['sql'] = "Insert into product_reference(product_id,reference) values('$product_id[id]',".PDF_PATH."pdf$product_id[id]')";
   }
 }
