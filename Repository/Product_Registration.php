@@ -39,14 +39,25 @@ class Product_Registration extends Repository{
     return $result;
   }
 
-  function genre(array $author,$input_parameters=NULL){
-    $author['sql'] = "SELECT id,name from category";
+  /**
+   * ジャンル,id取得
+   * @return $result ジャンル,id
+   */
+
+  function genre(){
+    $author['sql'] = "SELECT id,name from category where id <= 25";
     $result = parent::find($author);
     return $result;
   }
 
+  /**
+   * サブジャンル取得
+   * @param $id 親ジャンル
+   * @return $result サブジャンル
+   */
+
   function sub_genre($id){
-    $sql['sql'] = "SELECT name from category where parent_id = id";
+    $sql['sql'] = "SELECT id,name from category where parent_id = $id";
     $result = parent::find($sql);
     return $result;
   }
