@@ -13,7 +13,7 @@
   <div>
     <form method="POST" action="register_service.php">
       タイトル:<input type="text" name="title">
-      著者名:<input type="text" name="author"><br>
+      著者名:<input type="text" name="name"><br>
       説明:<textarea style="resize:none" name="description"></textarea>
       <div class="register">
         ジャンル:<select name="genre" id="genre">
@@ -91,7 +91,7 @@
       </div>
       価格:<input type="text" name="price"><br>
       引用:<input type="text" name="url"><br>
-      <input type="file" name="myfile">
+      <input type="file" name="pdf">
       <button name="submit">Upload</button>
     </form>
   </div>

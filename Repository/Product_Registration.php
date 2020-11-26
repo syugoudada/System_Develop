@@ -29,7 +29,7 @@ class Product_Registration extends Repository{
    * @return boolean 
    */
 
-  function url(array $author,$input_parameters=NULL){
+  function register_author(array $author,$input_parameters=NULL){
     if(isset($author["url"]) && $author["url"] != ""){
       $sql = "insert into author values('$author[name]','$author[url]')";
     }else{
