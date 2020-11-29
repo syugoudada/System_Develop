@@ -12,14 +12,9 @@ class Product_Registration extends Repository{
    * @return boolean 
    */
 
-  function exist(array $author, $input_parameters = NULL){
-    $sql = "select id from author where name = '$author[name]'";
-    $stmt = $this->dbh->prepare($sql); 
-    $flag = $stmt->execute($input_parameters);
-    if(!$flag){
-      return false;
-    }
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  function author_exist(array $author){
+    $sql['sql'] = "SELECT COUNT(*) from author where name = '$author[name]'";
+    $result = parent::exist($sql);
     return $result;
   }
 
@@ -29,16 +24,50 @@ class Product_Registration extends Repository{
    * @return boolean 
    */
 
-  function register_author(array $author,$input_parameters=NULL){
-    if(isset($author["url"]) && $author["url"] != ""){
-      $sql = "insert into author values('$author[name]','$author[url]')";
+  function register_author(array $author){
+    if($this->author_exist($author)){
+      $this->author_update($author);
+      return true;
     }else{
-      $sql = "insert into author values('$author[name]')";
+      if(isset($author['name']) && $author['name'] != ""){
+        if(filter_var($author['url'],FILTER_VALIDATE_URL)){
+          $sql['sql'] = "insert into author(name,url) values('$author[name]','$author[url]')";
+        }else{  
+          $sql['sql'] = "INSERT into author(name) values('$author[name]')";
+          var_dump($sql['sql']);
+        }
+      }else{
+        return false;
+      }
+      $result = parent::save($sql);
+      return $result;
     }
-    $stmt = $this->dbh->prepare($sql); 
-    $result = $stmt->execute($input_parameters);
-    return $result;
   }
+
+  /**
+   * 著者情報の更新
+   */
+
+  function author_update($author){
+    if(filter_var($author['url'],FILTER_VALIDATE_URL)){
+      $sql['sql'] = "UPDATE author set url = '$author[url]' where name = '$author[name]'";
+      $result = parent::save($sql);
+      return $result;
+    }
+  }
+
+  function register_genre($genre){
+    if(isset($genre['new_genre']) && $genre['sub_genre'] == "add" && $genre['new_genre'] != ""){
+      if(!$this->exits_genre($genre['new_genre'])){
+        $sql['sql'] = "Insert into category(name,parent_id) values('$genre[new_genre]',$genre[genre])";
+        $result = parent::save($sql);
+        return $result;
+      }
+    }elseif($genre['sub_genre'] != "" && isset($genre['sub_genre']) || $genre['genre']){
+      return true;
+    }
+  }
+
 
   /**
    * ジャンル,id取得
@@ -46,8 +75,8 @@ class Product_Registration extends Repository{
    */
 
   function genre(){
-    $author['sql'] = "SELECT id,name from category where id <= 25";
-    $result = parent::find($author);
+    $sql['sql'] = "SELECT id,name from category where id <= 25";
+    $result = parent::find($sql);
     return $result;
   }
 
@@ -63,43 +92,40 @@ class Product_Registration extends Repository{
     return $result;
   }
 
-  /**
-   * サブジャンル登録
-   * @param array $genre
-   * @return boolean
-   */
-
-  function sub_genre_save(array $genre){
-    $genre['sql'] = "Insert into categoly(name,parent_id) values($genre[title]',$genre[parent_id])";
-    $result = parent::save($genre['sql']);
-    return $result;
+  
+ function exits_genre($genre){
+   $sql['sql'] = "SELECT COUNT(*) FROM category name = $genre";
+   $result = parent::exist($sql);
+   return $result;
  }
 
  /**
-  * 本情報
-  * @param array $book_information
+  * 本登録
+  * @param array $book_info
   * @return boolean 
   */
 
- function save($book_information){
-  $categoly['sql'] = "Select id from category where name = '$book_information[subgenre]' && parent_id = '$book_information[id]'";
-  $author['sql'] = "Select id from author where name = '$book_information[author]'";
-  $book['category'] = parent::find($categoly);
-  $book['author'] = parent::find($author);
-  $book_information['sql'] = "Insert into product(author_id,name,category_id,description,price,evaluation_avg) values($book[author][0]['id'],$book_information[name],$book[category][0]['id'],$book_information[description],$book_information[price])";
-  $result = parent::save($book_information);
-  return $result;
+ function book_save($book_info){
+  if(is_numeric($book_info['price'])){
+    $author['sql'] = "Select id from author where name = '$book_info[name]'";
+    $book['author'] = parent::find($author);
+    $author_id = $book['author'][0]['id'];
+    //サブジャンル選択状態
+    if($book_info['sub_genre'] != 'add'){
+      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$book_info[sub_genre],'$book_info[description]',$book_info[price])";
+    //新規ジャンル登録した
+    }elseif($book_info['sub_genre'] == 'add'){
+      $genre['sql'] = "Select id from category where name = '$book_info[new_genre]'";
+      $book['genre'] = parent::find($genre);
+      $genre_id = $book['genre'][0]['id'];
+      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$genre_id,'$book_info[description]',$book_info[price])";
+    //メインジャンル
+    }else{
+      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$book_info[genre],'$book_info[description]',$book_info[price])";
+    }
+    $result = parent::save($sql);
+    return $result;
+  }
  }
 
- /**
-  * 商品参照登録
-  * @
-  * @return boolean $result
-  */
-
-  function product_reference($book_description){
-    $product['sql'] = "Select id from product where name = '$book_description[name]'";
-    $product_id = parent::find($product);
-    $reference_save['sql'] = "Insert into product_reference(product_id,reference) values('$product_id[id]',".PDF_PATH."pdf$product_id[id]')";
-  }
 }

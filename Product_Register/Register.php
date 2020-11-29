@@ -11,13 +11,13 @@
 
 <body>
   <div>
-    <form method="POST" action="register_service.php">
+    <form method="POST" enctype="multipart/form-data" action="register_service.php">
       タイトル:<input type="text" name="title">
       著者名:<input type="text" name="name"><br>
       説明:<textarea style="resize:none" name="description"></textarea>
       <div class="register">
-        ジャンル:<select name="genre" id="genre">
-          <option disabled selected>ジャンルを選択してください</option>
+        ジャンル:<select name="genre" id="genre" required>
+        <option value="">選択してください</option>
           <?php
           require_once('../Repository/Product_Registration.php');
           require_once('../Repository/db_config.php');
@@ -31,9 +31,10 @@
         </select>
         <script>
           $(function() {
-            //一つ目のジャンル選択後button有効か
+            //一つ目のジャンル選択後button有効化
             $('#genre').change(function(){
               $("#plusbutton").prop("disabled",false);
+              $(".new_genre").hide().val("");
             });
 
             //subgenre表示とボタン文字切り替え
@@ -75,7 +76,7 @@
                   dataType: "json",
                   success: function(msg) {
                     $('select#subgenre option').remove();
-                    $('#subgenre').append("<option disabled selected>ジャンルを選択してください</option>");
+                    $('#subgenre').append("<option value='first'>選択してください</option>");
                     $.each(msg,function(index,value){
                       $('#subgenre').append("<option value='" + value['id'] + "'>" + value['name'] + "</option>");
                     });
@@ -86,13 +87,14 @@
             });
           </script>
         </select>
-        <input type="text" class="new_genre" placeholder="新規登録してください" hidden>
+        <input type="text" class="new_genre" name="new_genre" placeholder="新規登録してください" hidden>
         <input type="button" id="plusbutton" class="plus" value="+" disabled><br>
       </div>
       価格:<input type="text" name="price"><br>
       引用:<input type="text" name="url"><br>
-      <input type="file" name="pdf">
-      <button name="submit">Upload</button>
+      PDF:<input type="file" name="pdf" accept=".pdf">
+      画像:<input type="file" name="image" accept="image/*">
+      <input type="submit" name="submit" value="Upload"/>
     </form>
   </div>
 </body>
