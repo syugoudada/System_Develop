@@ -2,7 +2,7 @@
 require_once "Repository.php";
 date_default_timezone_set('Asia/Tokyo');
 
-class Purchase extends Repository{
+class Purchase_Repository extends Repository{
 
   public $value;
   function __construct(string $name,string $password){
@@ -31,7 +31,6 @@ class Purchase extends Repository{
    */
 
   public function find(array $user,$input_parameters=NULL){
-    // $password = $this->encrypt($user['password']);
     $product_sql = "select id from product where name = '$this->value'";
     $user_sql = "select id from account where name = 'user'";
     $user['sql'] = $product_sql;

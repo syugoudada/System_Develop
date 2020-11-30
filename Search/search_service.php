@@ -1,8 +1,9 @@
 <?php
 header('Content-type:application/json; charset=utf8');
 require_once('../Repository/Search_Like.php');
+require_once('../Repository/db_config.php');
 
-$myself = new Search_Like('root', 'rootpass');
+$myself = new Search_Like_Repository(DB_USER,DB_PASS);
 $myself->login();
 $result = $myself->search($_POST['title']);
 $book["id"] = array();

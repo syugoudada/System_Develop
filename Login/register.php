@@ -1,7 +1,7 @@
 <?php
 session_start();
 define('Cookie_Ticket',time()+3600);
-require_once('../Repository/account.php');
+require_once('../Repository/Account_Repository.php');
 require_once('../Repository/db_config.php');
 $myself = new Account(DB_USER,DB_PASS);
 $must_login = array('user' => $_POST['user'], 'password' => $_POST['password'], 'confirm' => $_POST['confirm']);

@@ -1,7 +1,7 @@
 <?php
 require_once("Repository.php");
 require_once("db_config.php");
-class Product_Registration extends Repository{
+class Product_Registration_Repository extends Repository{
   function __construct(string $name,string $password){
     parent::__construct($name,$password);
   }
@@ -34,7 +34,6 @@ class Product_Registration extends Repository{
           $sql['sql'] = "insert into author(name,url) values('$author[name]','$author[url]')";
         }else{  
           $sql['sql'] = "INSERT into author(name) values('$author[name]')";
-          var_dump($sql['sql']);
         }
       }else{
         return false;
@@ -68,7 +67,6 @@ class Product_Registration extends Repository{
     }
   }
 
-
   /**
    * ジャンル,id取得
    * @return $result ジャンル,id
@@ -92,7 +90,6 @@ class Product_Registration extends Repository{
     return $result;
   }
 
-  
  function exits_genre($genre){
    $sql['sql'] = "SELECT COUNT(*) FROM category where name = '$genre'";
    $result = parent::exist($sql);

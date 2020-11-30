@@ -14,10 +14,8 @@ class Account extends Repository{
 
    public function save(array $user,$input_parameters=NULL){
     $password = $this->encrypt($user['password']);
-    // $sql = "INSERT INTO account(name,password,point) VALUES ('$user[user]','$user[password]',0)";
-    $sql = "INSERT INTO account(name,password,point) VALUES ('$user[user]','$password',0)";
-    $user['sql'] = $sql;
-    $result = parent::save($user);
+    $sql['sql'] = "INSERT INTO account(name,password,point) VALUES ('$user[user]','$password',0)";
+    $result = parent::save($sql);
     return $result;
    }
 
@@ -28,9 +26,8 @@ class Account extends Repository{
    */
 
    public function find(array $user,$input_parameters=NULL){
-    // $sql = "Select name,point from account where name = '$user[user]' && password = '$user[password]'";
-    $user['sql'] = "Select name,point from account where name = '$user[user]'";
-    $result = parent::find($user);
+    $sql['sql'] = "Select name,point from account where name = '$user[user]'";
+    $result = parent::find($sql);
     return $result;
    }
 
@@ -41,8 +38,8 @@ class Account extends Repository{
    */
 
   public function exist(array $user,$input_parameters = NULL){
-    $user['sql'] = "SELECT COUNT(*) FROM account where name = '$user[user]'"; 
-    $result = parent::exist($user);
+    $sql['sql'] = "SELECT COUNT(*) FROM account where name = '$user[user]'"; 
+    $result = parent::exist($sql);
     return $result;
   }
 
@@ -51,8 +48,8 @@ class Account extends Repository{
     */
 
    function password_resach(array $user){
-     $user['sql'] = "SELECT password from account where name = '$user[user]'";
-     $result = parent::find($user);
+     $sql['sql'] = "SELECT password from account where name = '$user[user]'";
+     $result = parent::find($sql);
      $flag = $this->decryption($user['password'],$result[0]['password']);
      return $flag;
    }

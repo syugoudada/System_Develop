@@ -1,6 +1,6 @@
 <?php
 require_once('Repository.php');
-class Search_Like extends Repository{
+class Search_Like_Repository extends Repository{
 
   function __construct(string $name,string $password){
     parent::__construct($name,$password);

@@ -1,7 +1,7 @@
 <?php
 require_once("../Repository/Search_Like.php");
 require_once("../Repository/db_config.php");
-$myself = new Search_Like(DB_USER, DB_PASS);
+$myself = new Search_Like_Repository(DB_USER, DB_PASS);
 $myself->login();
 $product_detail = $myself->find($_POST);
 ?>

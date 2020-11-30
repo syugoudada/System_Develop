@@ -2,7 +2,7 @@
 require_once('../Repository/Purchase_Repository.php');
 require_once('../Repository/db_config.php');
 session_start();
-$myself = new Purchase(DB_USER,DB_PASS);
+$myself = new Purchase_Repository(DB_USER,DB_PASS);
 $myself->login();
 $kago = array('この音とまれ!');
 // $user = $_SESSION['user'];

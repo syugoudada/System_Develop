@@ -22,9 +22,9 @@
       <div class="register">
         ジャンル:<select name="genre" id="genre" required>
           <?php
-          require_once('../Repository/Product_Registration.php');
+          require_once('../Repository/Product_Registration_Repository.php');
           require_once('../Repository/db_config.php');
-          $myself = new Product_Registration(DB_USER, DB_PASS);
+          $myself = new Product_Registration_Repository(DB_USER, DB_PASS);
           $myself->login();
           $genre = $myself->genre();
           foreach ($genre as $value) {

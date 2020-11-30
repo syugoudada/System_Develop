@@ -1,8 +1,8 @@
 <?php
 require_once('../Repository/db_config.php');
-require_once('../Repository/Product_Registration.php');
+require_once('../Repository/Product_Registration_Repository.php');
 require_once('../File/file.php');
-$myself = new Product_Registration(DB_USER, DB_PASS);
+$myself = new Product_Registration_Repository(DB_USER, DB_PASS);
 
 $author_info = ['title' => $_POST['title'], 'name' => $_POST['name'],'description'=>$_POST['description'] ,'genre' => $_POST['genre'], 'sub_genre' => $_POST['sub_genre'], 'new_genre' => $_POST['new_genre'], 'price' => $_POST['price'], 'url' => $_POST['url'], 'submit' => $_POST['submit']];
 

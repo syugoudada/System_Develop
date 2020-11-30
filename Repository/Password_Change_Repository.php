@@ -19,14 +19,12 @@ class Password_Change_Repository extends Repository{
    * @return boolean 
    */
 
-  function update(array $user,$old,$new_password,$input_parameters=NULL){
+  function update(array $user,$old,$new_password){
     $old_password = $this->find($user);
     if($this->decryption($old,$old_password[0]['password'])){
       $new_password = $this->encrypt($new_password);
-      $sql = "UPDATE account SET password = '$new_password' where name = '$user[user]'";
-      var_dump($sql);
-      $stmt = $this->dbh->prepare($sql); 
-      $result = $stmt->execute($input_parameters);
+      $sql['sql'] = "UPDATE account SET password = '$new_password' where name = '$user[user]'";
+      $result = parent::save($sql);
       return $result;
     }else{
       return false;
