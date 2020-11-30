@@ -94,7 +94,7 @@ class Product_Registration extends Repository{
 
   
  function exits_genre($genre){
-   $sql['sql'] = "SELECT COUNT(*) FROM category name = $genre";
+   $sql['sql'] = "SELECT COUNT(*) FROM category where name = '$genre'";
    $result = parent::exist($sql);
    return $result;
  }
@@ -106,26 +106,29 @@ class Product_Registration extends Repository{
   */
 
  function book_save($book_info){
-  if(is_numeric($book_info['price'])){
+  if(is_numeric($book_info['price']) && !$this->find_id($book_info)){
     $author['sql'] = "Select id from author where name = '$book_info[name]'";
     $book['author'] = parent::find($author);
     $author_id = $book['author'][0]['id'];
     //サブジャンル選択状態
     if($book_info['sub_genre'] != 'add'){
-      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$book_info[sub_genre],'$book_info[description]',$book_info[price])";
+      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[title]',$book_info[sub_genre],'$book_info[description]',$book_info[price])";
     //新規ジャンル登録した
     }elseif($book_info['sub_genre'] == 'add'){
       $genre['sql'] = "Select id from category where name = '$book_info[new_genre]'";
       $book['genre'] = parent::find($genre);
       $genre_id = $book['genre'][0]['id'];
-      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$genre_id,'$book_info[description]',$book_info[price])";
-    //メインジャンル
-    }else{
-      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[name]',$book_info[genre],'$book_info[description]',$book_info[price])";
+      $sql['sql'] = "Insert into product(author_id,name,category_id,description,price)values('$author_id','$book_info[title]',$genre_id,'$book_info[description]',$book_info[price])";
     }
     $result = parent::save($sql);
     return $result;
   }
+ }
+
+ function find_id($book_info){
+    $sql['sql'] = "SELECT id from product where name = '$book_info[title]'";
+    $result = parent::find($sql);
+    return $result;
  }
 
 }

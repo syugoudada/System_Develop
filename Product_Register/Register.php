@@ -1,3 +1,7 @@
+<?php
+  session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -5,7 +9,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Css/register.css">
+  
   <title>Document</title>
 </head>
 
@@ -17,7 +21,6 @@
       説明:<textarea style="resize:none" name="description"></textarea>
       <div class="register">
         ジャンル:<select name="genre" id="genre" required>
-        <option value="">選択してください</option>
           <?php
           require_once('../Repository/Product_Registration.php');
           require_once('../Repository/db_config.php');
@@ -30,65 +33,54 @@
           ?>
         </select>
         <script>
+          function ajax(sub_genre){
+              $.ajax({
+                  type: 'POST',
+                  url: 'sub_genre.php',
+                  data: sub_genre,
+                  dataType: 'json',
+                  success: function(msg) {
+                    $('select#sub_genre option').remove();
+                    $.each(msg,function(index,value){
+                      $('#sub_genre').append("<option value='" + value['id'] + "'>" + value['name'] + "</option>");
+                    });
+                    $('#sub_genre').append("<option value='add'>新規追加</option>");
+                  }
+                });
+              }
+
           $(function() {
             //一つ目のジャンル選択後button有効化
             $('#genre').change(function(){
-              $("#plusbutton").prop("disabled",false);
+              // $("#plusbutton").prop("disabled",false);
               $(".new_genre").hide().val("");
             });
 
-            //subgenre表示とボタン文字切り替え
-            $('#plusbutton').click(function() {
-              var click = $(this);
-              if (click.hasClass('plus')) {
-                $('#subgenre').show();
-                click.val("-");
-                click.removeClass('plus');
-                if ($('#subgenre').val() === "add") {
-                  $('.new_genre').show();
-                }
-                $('#subgenre').change(function() {
-                  if ($(this).val() === "add") {
-                    $('.new_genre').show();
-                  } else {
-                    $(".new_genre").hide().val("");
-                  }
-                });
-              } else {
-                $(".new_genre").hide().val("");
-                $('#subgenre').hide();
-                click.val('+');
-                click.addClass('plus');
+            $('#sub_genre').change(function(){  
+              if($(this).val() == "add"){
+                $('.new_genre').show();
+              }else{
+                $('.new_genre').hide();
               }
+            });
+
+            $('#genre').change(function() {
+              sub_genre = {'sub_id': $('#genre').val()};
+              ajax(sub_genre);
             });
           });
         </script>
-        <select name="subgenre" id="subgenre" class="subgenre">
-          <script>
-            //ajax(subgenre取得)
-            $(function() {
-              $('#genre').change(function() {
-                sub_genre = {"sub_id": $('#genre').val()};
-                $.ajax({
-                  type: "POST",
-                  url: "sub_genre.php",
-                  data: sub_genre,
-                  dataType: "json",
-                  success: function(msg) {
-                    $('select#subgenre option').remove();
-                    $('#subgenre').append("<option value='first'>選択してください</option>");
-                    $.each(msg,function(index,value){
-                      $('#subgenre').append("<option value='" + value['id'] + "'>" + value['name'] + "</option>");
-                    });
-                    $('#subgenre').append("<option value='add'>新規追加</option>");
-                  }
-                });
-              });
-            });
-          </script>
+        <select name="sub_genre" id="sub_genre" class="sub_genre">
+          <?php
+            $genre = $myself->sub_genre(1);
+            foreach ($genre as $value) {
+              print("<option value='$value[id]'>$value[name]</option>");
+            }
+          ?>
+            <option value='add'>新規追加</option>
         </select>
         <input type="text" class="new_genre" name="new_genre" placeholder="新規登録してください" hidden>
-        <input type="button" id="plusbutton" class="plus" value="+" disabled><br>
+        <br>
       </div>
       価格:<input type="text" name="price"><br>
       引用:<input type="text" name="url"><br>
@@ -98,5 +90,4 @@
     </form>
   </div>
 </body>
-
 </html>
